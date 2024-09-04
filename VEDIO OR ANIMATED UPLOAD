@@ -1,0 +1,28 @@
+<video autoplay loop id="video-background" muted plays-inline>
+  <source src="#APP_FILES#animated white/apex dev umar farooq (2).mp4" type="video/mp4">
+</video>
+
+
+
+video {
+  position: fixed;
+  min-width: 100%;
+  max-width: 50%;
+  width: auto;
+  height: 100%;
+  z-index: -500;
+}
+
+===========================================================
+CODE PUT THE INLINE OPTION
+.t-BadgeList.u-colors .t-BadgeList-value a {
+    /* COLOR: BLACK; */
+    color: black;
+}
+
+body{
+background-image:url('#APP_FILES#Welcome.gif');
+background-repeat: no-repeat;
+background-position: center;
+background-size: 100%;
+}
