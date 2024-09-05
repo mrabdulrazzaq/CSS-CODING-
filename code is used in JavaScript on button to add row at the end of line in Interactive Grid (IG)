@@ -1,0 +1,9 @@
+var ig$ = apex.region("detail").widget();
+
+var actions = ig$.interactiveGrid("getActions");
+
+var grid$ = ig$.interactiveGrid("getViews").grid.view$;
+
+grid$.grid("setSelection", grid$.find("tr").last());
+
+actions.invoke("selection-add-row");
