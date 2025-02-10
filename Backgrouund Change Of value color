@@ -1,0 +1,2 @@
+'<span style="background-color: #DADD98; color: #41422d; padding: 5px 15px; border-radius: 5px;">' || 
+  TO_CHAR(NVL(OPENING_BALANCE,0), '999G999G999G999G990D00') || '</span>' AS OPENING_BALANCE,
