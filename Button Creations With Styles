@@ -1,0 +1,18 @@
+============BUTTON CREATIONS =============
+.my-alt-button {
+  background: linear-gradient(15deg, #B88746, #FDF5A6); /* New gradient colors */
+  color: #191919; /* Slightly darker text color */
+  border: none; /* No border */
+  font: normal;
+  padding: 6px 12px; /* Button padding */
+  display: inline-block;
+  text-align: left; /* Center the button text */
+  border-radius: 5px; /* Rounded corners */
+  transition: all 0.3s ease; /* Smooth transition for hover/focus */
+}
+
+
+.my-alt-button::before {
+  content: "👁️"; /* Print icon */
+  font-size: 13px; /* Adjust icon size */
+}
