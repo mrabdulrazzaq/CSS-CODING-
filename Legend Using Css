@@ -1,0 +1,45 @@
+
+
+-------USING THIS CODE I CAN ADD LEGENDS WISE SYMBOLS FOR SHOWING DATA ----------------
+
+
+var legendHTML = `
+  <div id="custom-legend" style="margin-top:5px; display:flex; gap:15px; flex-wrap:wrap; align-items:center;">
+    <div style="display:flex; align-items:center;">
+      <span style="width:12px; height:12px; border-radius:50%; background:#A8E69A; display:inline-block; margin-right:6px;"></span>
+      <span>Amount</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="width:12px; height:12px; border-radius:50%; background:#ADEFD1; display:inline-block; margin-right:6px;"></span>
+      <span> Multiple BG</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="margin-right:6px; color:#28a745; font-size: 15px;">✔</span>
+      <span>Allocated</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="margin-right:6px; color:#28a745; font-size: 15px;">👍🏻</span>
+      <span>Matured</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="margin-right:6px; color:#28a745; font-size: 15px;">⏳</span>
+      <span>Partial Allocated</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="margin-right:6px; color:#28a745; font-size: 15px;">✏️</span>
+      <span>Demand Created</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="margin-right:6px; color:#28a745; font-size: 15px;">⏰</span>
+      <span>Early Matured</span>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <span style="margin-right:6px; color:#28a745; font-size: 15px;">✌🏻</span>
+      <span>Demand Approved</span>
+  </div>
+`;
+
+// Only add it once
+if (!document.querySelector("#custom-legend")) {
+  document.querySelector("#LU_toolbar_controls")?.insertAdjacentHTML("beforeend", legendHTML);
+}
