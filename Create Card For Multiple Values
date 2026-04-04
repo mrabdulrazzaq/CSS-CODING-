@@ -1,0 +1,237 @@
+DECLARE
+    l_html CLOB := '';
+    l_count NUMBER := 0;
+BEGIN
+
+l_html := l_html || '
+<style>
+.so-cards{
+ display:flex;
+ flex-wrap:wrap;
+ gap:20px;
+ justify-content:center;
+ padding:20px;
+ background:#f4f6f5;
+}
+.so-card{
+ box-sizing:border-box;
+ width:100%;
+ max-width:1200px;
+ background:#fff;
+ border:1px solid #e2e8f0;
+ border-radius:16px;
+ box-shadow:0 2px 6px rgba(0,0,0,0.08);
+ margin:12px;
+ transition:all .3s ease-in-out;
+
+
+
+
+}
+.so-card:hover{
+ box-shadow:0 8px 18px rgba(0,0,0,0.12);
+ transform:translateY(-4px);
+}
+.so-header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ background:#e6f7e6;
+ padding:12px 16px;
+ border-radius:16px 16px 0 0;
+}
+.so-title{
+ font-size:20px;
+ font-weight:bold;
+ color:#1f7a1f;
+ margin:0;
+}
+.so-soid{
+ font-size:14px;
+ color:#3d6b3d;
+ margin:0;
+}
+.so-total-badge{
+ background:#28a745;
+ color:#fff;
+ padding:4px 12px;
+ border-radius:12px;
+ font-weight:bold;
+ font-size:14px;
+}
+.so-row{
+ display:flex;
+ justify-content:space-between;
+ font-size:15px;
+ color:#155724;
+ margin-bottom:6px;
+ padding:0 16px;
+}
+.so-label{font-weight:600;}
+.so-value{font-weight:600;}
+</style>';
+
+l_html := l_html || '<div class="so-cards">';
+
+FOR r IN (
+
+            WITH REGISTRATAION AS(
+            SELECT SR_ID,REG_NAME,PARTY_NAME,REG_CODE
+            FROM DEV.AB_SETUP_REGISTRATION
+            WHERE REG_STATUS='Y'
+            ),
+            LOOKUP AS(
+            SELECT DET_ID,LOOKUP_DET_NAME
+            FROM DEV.AB_LOOKUP_DETAIL
+            WHERE STATUS='Y'
+   )
+    ,AGENCY_NAME AS(
+         SELECT
+                 POLICY_ID,
+           ---  LISTAGG('<li>' || AG.REG_NAME || ' - ' || AG.REG_CODE || '</li>', '') WITHIN GROUP (ORDER BY AG.REG_NAME) AS AGENCY,
+          --   LISTAGG('<li>' || SP.REG_NAME || '</li>', '')  WITHIN GROUP (ORDER BY SP.REG_NAME) AS SALE_POINT
+                 
+                LISTAGG(AG.REG_NAME || ' - ' || AG.REG_CODE, ' | ')  WITHIN GROUP (ORDER BY AG.REG_NAME) AS AGENCY,
+                LISTAGG(SP.REG_NAME, ' | ')   WITHIN GROUP (ORDER BY SP.REG_NAME) AS SALE_POINT
+         FROM
+                     DEV.AB_SETUP_POL_REGISTRATION_DET PLD
+              JOIN REGISTRATAION AG ON AG.SR_ID=PLD.AGENCY_ID
+         LEFT JOIN REGISTRATAION SP ON SP.SR_ID=PLD.SALE_POINT_ID
+         WHERE
+                      STATUS='Y'
+             AND POLICY_TYPE='1033'
+             AND ORG_ID=:GV_ORG_ID
+             AND AGENCY_ID IS NOT NULL
+         GROUP BY
+                 POLICY_ID
+ )       
+            SELECT
+                        PL.POLICY_ID,
+                        CP.REG_NAME COMPANY_NAME,
+                        SP.PARTY_NAME SUPPLIER_NAME,
+                        AG.AGENCY AGENCY_NAME,
+                        AG.SALE_POINT AS SALE_POINT,
+                        TT.LOOKUP_DET_NAME TRANSACTION_TYPE,
+                        CT.LOOKUP_DET_NAME CONDITIONAL_TYPE,
+                        CITY REGION,
+                        ITM.ITEM_NAME || PACKING_SIZE || ' (' || UNIT || ') ' || PACKING AS PRODUCT_NAME,
+                        TO_CHAR(PLD.POLICY_EFFECTIVE_SD,'DD-MON-YYYY') POLICY_EFFECTIVE_SD,
+                        TO_CHAR(PLD.POLICY_EFFECTIVE_ED,'DD-MON-YYYY') POLICY_EFFECTIVE_ED,
+                         INITCAP(PL.CREATED_BY)||' ('||TO_CHAR(PL.CREATED_ON,'DD-MON-YYYY HH:MIPM') ||')' ADD_BY,
+          ----------------------------------------------------
+                        NVL(DD_RATE,0) DD_RATE,               
+                        NVL(SLAB_MT,0) SLAB_MT,
+                        NVL(DMA,0) DMA,
+                        NVL(SRP_POINTS,0) SRP_POINTS,
+                        NVL(PLD.CASH_DISCOUNT,0) as CASH_DISCOUNT,
+                        NVL(BANK_PROFIT_DAYS,0) BANK_PROFIT_DAYS,
+                        NVL(BANK_PROFIT,0) BANK_PROFIT,
+                        NVL(PRICE_PRO_AMOUNT,0) PRICE_PRO_AMOUNT,
+                  -------------NEW ---------------      
+                             NVL(PLD.HIDDEN_DMA,0) AS HIDDEN_DMA,
+                             NVL(PLD.TRANSSHIPMENT,0) AS  TRANSSHIPMENT,
+                             NVL(PLD.DIVERSION,0) AS  DIVERSION,
+                             NVL(PLD.HIDDEN_DIS,0) AS    HIDDEN_DIS,
+                             NVL(PLD.WAREHOUSE_ALLOUNCE,0) AS WAREHOUSE_ALLOUNCE,
+                             NVL(PLD.CREDIT_CHARGES,0) AS CREDIT_CHARGES,
+                             NVL(PLD.DISCOUNTS,0) AS DISCOUNTS,
+                             NVL(PLD.CONDITIONAL_DISCOUNT,0) AS CONDITIONAL_DISCOUNT,
+                             NVL(PLD.INVOICE_BASED,0) AS INVOICE_BASED,
+                                       
+                      
+      ---------------------------TOTAL bENIFITS------------------------                  
+                         NVL(PLD.SLAB_MT,0)+ NVL(PLD.DMA,0)+ NVL(PLD.HIDDEN_DMA,0)+ NVL(PLD.SRP_POINTS,0)
+                        + NVL(PLD.TRANSSHIPMENT,0)+ NVL(PLD.DIVERSION,0)+ NVL(PLD.HIDDEN_DIS,0)
+                        + NVL(PLD.WAREHOUSE_ALLOUNCE,0)+ NVL(PLD.CREDIT_CHARGES,0)+ NVL(PLD.DISCOUNTS,0)
+                        + NVL(PLD.SUBJ_TO_PRODUCT,0)+ NVL(PLD.PSI,0)+ NVL(PLD.CONDITIONAL_DISCOUNT,0)
+                        + NVL(PLD.INVOICE_BASED,0)+ NVL(PLD.CASH_DISCOUNT,0)+ NVL(PLD.PRICE_PRO_AMOUNT,0)
+                        TOTAL_POLICY_RATE,
+     ---------------------------FINAL RATE ------------------------ 
+                       NVL(PLD.DD_RATE,0) - NVL(PLD.SLAB_MT,0)- NVL(PLD.DMA,0)- NVL(PLD.HIDDEN_DMA,0)- NVL(PLD.SRP_POINTS,0)-
+                       NVL(PLD.TRANSSHIPMENT,0)- NVL(PLD.DIVERSION,0)- NVL(PLD.HIDDEN_DIS,0)- NVL(PLD.WAREHOUSE_ALLOUNCE,0)
+                    -  NVL(PLD.CREDIT_CHARGES,0)- NVL(PLD.DISCOUNTS,0)- NVL(PLD.SUBJ_TO_PRODUCT,0)- NVL(PLD.PSI,0)- NVL(PLD.CONDITIONAL_DISCOUNT,0)
+                    -  NVL(PLD.INVOICE_BASED,0)- NVL(PLD.CASH_DISCOUNT,0)- NVL(PLD.PRICE_PRO_AMOUNT,0) AS FINAL_RATE,
+     ---------------------------FINAL RATE -------------------------------------------------------  
+               (NVL(DD_RATE,0) - NVL(PLD.SLAB_MT,0)- NVL(PLD.DMA,0)- NVL(PLD.HIDDEN_DMA,0)- NVL(PLD.SRP_POINTS,0)-
+               NVL(PLD.TRANSSHIPMENT,0)- NVL(PLD.DIVERSION,0)- NVL(PLD.HIDDEN_DIS,0)- NVL(PLD.WAREHOUSE_ALLOUNCE,0)
+            -  NVL(PLD.CREDIT_CHARGES,0)- NVL(PLD.DISCOUNTS,0)- NVL(PLD.SUBJ_TO_PRODUCT,0)- NVL(PLD.PSI,0)- NVL(PLD.CONDITIONAL_DISCOUNT,0)
+            -  NVL(PLD.INVOICE_BASED,0)- NVL(PLD.CASH_DISCOUNT,0)- NVL(PLD.PRICE_PRO_AMOUNT,0))
+            -  NVL(PLD.BANK_PROFIT,0)+NVL(PLD.FREIGHT_RATE,0) AS NET_RATE
+   ---------------------------FINAL RATE -------------------------------------------------------------------              
+            FROM 
+                 DEV.AB_SETUP_POL_REGISTRATION PL
+            JOIN DEV.AB_SETUP_POL_REGISTRATION_DET PLD ON PLD.POLICY_ID=PL.POLICY_ID  AND PLD.STATUS='Y'
+            JOIN AGENCY_NAME AG ON AG.POLICY_ID=PL.POLICY_ID
+            LEFT JOIN REGISTRATAION CP ON CP.SR_ID=PL.COMPANY_ID
+            LEFT JOIN REGISTRATAION SP ON SP.SR_ID=PL.SUPPLIER_ID
+            LEFT JOIN REGISTRATAION AG ON AG.SR_ID=PL.AGENCY_ID
+            LEFT JOIN LOOKUP TT ON TT.DET_ID=PL.TRANSACTION_TYPE_ID
+            LEFT JOIN LOOKUP CT ON CT.DET_ID=PLD.P_CATEGORY_ID
+            LEFT JOIN DEV.AB_ITEMS_MASTER ITM ON ITM.ITEM_ID = PLD.ITEM_ID
+            WHERE
+                              PL.POLICY_TYPE='1033'
+                      AND
+                             PL.STATUS='Y'
+                        AND PL.ORG_ID = :GV_ORG_ID
+                        AND PLD.POL_DET_ID =:P525_DD_RATE_POLICY --,PLD.POL_DET_ID )
+                        AND PLD.P_CATEGORY_ID =1031
+                        ORDER BY PL.POLICY_ID DESC
+
+) LOOP
+
+l_count := l_count + 1;
+
+l_html := l_html || '
+<div class="so-card">
+
+<div class="so-header">
+            <div>
+                <p class="so-title">'||apex_escape.html(r.PRODUCT_NAME)||'</p>
+             <p class="so-soid">Company: '||apex_escape.html(r.COMPANY_NAME)||'</p>
+             <p class="so-soid">Policy Start Date: '||apex_escape.html(r.POLICY_EFFECTIVE_SD)||'</p>
+             <p class="so-soid">Policy End Date: '  ||apex_escape.html(r.POLICY_EFFECTIVE_ED)||'</p>
+            </div>
+      <span class="so-total-badge"> Total Benefits Rs.'||NVL(TO_CHAR(r.TOTAL_POLICY_RATE,'FM999G999G999'),'0')||'</span></div>
+
+<hr>
+
+<div class="so-row"><span class="so-label">Agency:</span><span class="so-value">'||apex_escape.html(r.AGENCY_NAME)||'</span></div>
+<div class="so-row"><span class="so-label">Sale Point:</span><span class="so-value">'||apex_escape.html(r.SALE_POINT)||'</span></div>
+<div class="so-row"><span class="so-label">Conditional Type:</span><span class="so-value">'||apex_escape.html(r.CONDITIONAL_TYPE)||'</span></div>
+<div class="so-row"><span class="so-label">DD Rate:</span><span class="so-value">Rs. '||NVL(TO_CHAR(r.DD_RATE,'FM999G999G999'),'0')||'</span></div>
+<div class="so-row"><span class="so-label">Slab Mt:</span><span class="so-value">'||r.SLAB_MT||'</span></div>
+<div class="so-row"><span class="so-label">Srp Points:</span><span class="so-value">'||r.SRP_POINTS||'</span></div>
+<div class="so-row"><span class="so-label">Cash Discount:</span><span class="so-value">'||r.CASH_DISCOUNT||'</span></div>
+<div class="so-row"><span class="so-label">Price Protection Amount:</span><span class="so-value">'||r.PRICE_PRO_AMOUNT||'</span></div>
+<div class="so-row"><span class="so-label"> Hidden DMA:</span><span class="so-value">'||r.HIDDEN_DMA||'</span></div>
+<div class="so-row"><span class="so-label"> Transhipment:</span><span class="so-value">'||r.TRANSSHIPMENT||'</span></div>
+<div class="so-row"><span class="so-label"> Diversions:</span><span class="so-value">'||r.DIVERSION||'</span></div>
+<div class="so-row"><span class="so-label">Dicount:</span><span class="so-value">'||r.HIDDEN_DIS||'</span></div>
+<div class="so-row"><span class="so-label">Warehouse Allownce:</span><span class="so-value">'||r.WAREHOUSE_ALLOUNCE||'</span></div>
+<div class="so-row"><span class="so-label">Credit Charges:</span><span class="so-value">'||r.CREDIT_CHARGES||'</span></div>
+<div class="so-row"><span class="so-label">Invoice Based:</span><span class="so-value">'||r.INVOICE_BASED||'</span></div>
+<div class="so-row"><span class="so-label">DMA:</span><span class="so-value">'||r.DMA||'</span></div>
+<div class="so-row"><span class="so-label">Bank Profit Days:</span><span class="so-value">'||  r.BANK_PROFIT_DAYS||'</span></div>
+<div class="so-row"><span class="so-label">Bank Profit:</span><span class="so-value">Rs. '||NVL(TO_CHAR(r.BANK_PROFIT,'FM999G999G999'),'0')||'</span></div>
+<div class="so-row"><span class="so-label">Final Rate:</span><span class="so-value">Rs. '||NVL(TO_CHAR(r.FINAL_RATE,'FM999G999G999'),'0')||'</span></div>
+<div class="so-row"><span class="so-label">Net Rate:</span><span class="so-value">Rs. '||NVL(TO_CHAR(r.NET_RATE,'FM999G999G999'),'0')||'</span></div>
+<div class="so-row"><span class="so-label">Add By:</span><span class="so-value">'||apex_escape.html(r.ADD_BY)||'</span></div>
+</div>';
+
+END LOOP;
+
+l_html := l_html || '</div>';
+
+IF l_count = 0 THEN
+    htp.p('<div style="padding:18px;background:#e6f7e6;border:1px solid #28a745;border-radius:12px;color:#155724;">
+    No records found.
+    </div>');
+ELSE
+    htp.p(l_html);
+END IF;
+
+EXCEPTION
+WHEN OTHERS THEN
+    htp.p('<div style="color:red;font-weight:bold;">Error: '||apex_escape.html(SQLERRM)||'</div>');
+END;
+
