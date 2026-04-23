@@ -1,0 +1,32 @@
+    CASE
+        -- Less than 60 minutes → show only minutes
+        WHEN (AUF.PROCESSING - SYSDATE) * 24 * 60 < 60
+        THEN '⏱️ ' || TO_CHAR(ROUND((AUF.PROCESSING - SYSDATE) * 24 * 60)) || ' mins remaining'
+
+        -- 60 minutes or more → show hours + mins
+        ELSE
+            '🕐 ' ||
+            TO_CHAR(FLOOR((AUF.PROCESSING - SYSDATE) * 24)) || 'h ' ||
+            TO_CHAR(ROUND(MOD((AUF.PROCESSING - SYSDATE) * 24 * 60, 60))) || 'm remaining'
+    END ||
+'</span>' ||
+            '</div>' ||
+
+            '<div class="timeline-track">' ||
+                '<div class="timeline-bar ' ||
+                    CASE
+                        WHEN ((AUF.PROCESSING - SYSDATE) * 100 / (AUF.PROCESSING - AUF.PROCESS_DATE)) > 35 THEN 'bar-green'
+                        WHEN ((AUF.PROCESSING - SYSDATE) * 100 / (AUF.PROCESSING - AUF.PROCESS_DATE)) > 20 THEN 'bar-yellow-green'
+                        WHEN ((AUF.PROCESSING - SYSDATE) * 100 / (AUF.PROCESSING - AUF.PROCESS_DATE)) > 8  THEN 'bar-yellow'
+                        ELSE 'bar-red'
+                    END ||
+                '" style="width:' ||
+                    TO_CHAR(ROUND((AUF.PROCESSING - SYSDATE) * 100 / (AUF.PROCESSING - AUF.PROCESS_DATE))) ||
+                '%;">' ||
+                    '<div class="bar-shimmer"></div>' ||
+                '</div>' ||
+            '</div>' ||
+
+        '</div>'
+
+END AS TIMELINE_STATUS,
