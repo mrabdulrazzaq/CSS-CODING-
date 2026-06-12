@@ -1,0 +1,488 @@
+=========================================HTML Code ===================================================
+<div class="status-cards">
+
+  <!-- CR Amount -->
+  <div class="status-card cr-amount">
+    <img src="#APP_FILES#icons/cash-delivery.png" class="status-icon" alt="CR Amount">
+    <div class="count">
+      <span id="card_cr_amount">0</span>
+    </div>
+    <div class="label">CR Amount</div>
+  </div>
+
+</div>
+==========================================INLINE CSS FOR CARDS REPORT AND OVERALLL  ======================================================================
+
+/*--------------------*/
+
+.t-Body-content {
+    background-color: #ececec;
+}
+.heading-green {
+        color: Green;
+        text-align: center;
+        margin: 0;
+        padding: 1px 0;
+}
+.gradient-line-green {
+        display: block;
+        border: 0;
+        height: 2px; 
+        border-radius: 3px; 
+        background: linear-gradient(to right, #a4d3a2, #2a8d4b, #a4d3a2); 
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); 
+        margin: 10px auto; 
+}
+.my-alt-button {
+
+    background: linear-gradient(
+        135deg,
+        #2e2e2eb7 0%,
+        #3b3b3b 45%,
+        #32b258 100%
+    );
+
+    color: #ffffff;
+
+    border: 1px solid rgba(29, 101, 51, 0.154)9);
+
+    padding: 8px 14px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+
+    box-shadow:
+        0 5px 14px rgba(0,0,0,0.25),
+        0 0 10px rgba(29, 101, 50, 0.25);
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* ICON */
+.my-alt-button::before {
+    content: "➕";
+    font-size: 14px;
+}
+
+/* HOVER */
+.my-alt-button:hover {
+    transform: translateY(-2px);
+
+    border-color: #38ef7e1f;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,0.35),
+        0 0 18px rgba(56, 239, 126, 0.154);
+}
+
+/* ACTIVE */
+.my-alt-button:active {
+    transform: translateY(0px);
+}
+
+/* LIGHT SWEEP EFFECT */
+.my-alt-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: rgba(56, 239, 125, 0.15);
+    transform: skewX(-25deg);
+    transition: 0.5s;
+}
+
+.my-alt-button:hover::after {
+    left: 120%;
+}
+
+.large-input input,
+.large-input textarea,
+.large-input select {
+    min-height: 20px !important;
+}
+
+/* Button Styling */
+.large-input button {
+    height: 50px;
+    background: linear-gradient(135deg, #3ba14f, #3ba14f);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    animation: pulse 2s infinite;
+}
+
+/* Hover Effect */
+.large-input button:hover {
+    background: linear-gradient(135deg, #2e8b47, #2e8b47);
+    box-shadow: 0 6px 14px rgba(0, 73, 153, 0.3);
+    transform: translateY(-4px);
+    animation: bounce 0.5s ease-in-out;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+/* Subtle Pulsing Effect */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+/*--------------------deleterecord--------------------------*/
+.deleterecord {
+    padding: 10px 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    transform: scale(1);
+    background: rgba(255, 77, 79, 0.08);
+}
+
+.deleterecord .fa-trash {
+    font-size: 22px;
+    color: #ff4d4f;
+    transition: all 0.3s ease;
+}
+.deleterecord:hover {
+    background: linear-gradient(135deg, #ff4d4f, #ff7875);
+    transform: scale(1.15);
+    box-shadow: 0 8px 20px rgba(255, 77, 79, 0.4);
+}
+.deleterecord:hover .fa-trash {
+    color: #fff;
+    animation: bounce 0.4s ease;
+}
+.deleterecord:active {
+    transform: scale(0.92);
+}
+@keyframes bounce {
+    0%   { transform: translateY(0); }
+    30%  { transform: translateY(-6px); }
+    60%  { transform: translateY(3px); }
+    100% { transform: translateY(0); }
+}
+.t-Body-content {
+    background-color: #ececec;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/*----------------------header-----------------------------*/
+.stock-header-pro{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:16px 22px;   /* 👈 increased */
+
+    border-radius:10px;
+
+    background:linear-gradient(
+        135deg,
+        #2e2e2e 0%,
+        #3b3b3b 45%,
+        #1d6532 100%
+    );
+
+    border-left:5px solid #1d6532;
+
+    box-shadow:
+        0 5px 14px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+
+    font-family:Segoe UI, Arial, sans-serif;
+    color:#ffffff;
+
+    transition:.25s ease;
+}
+
+/* LEFT */
+.title-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:4px;
+}
+
+.header-icon{
+    font-size:16px;   /* 👈 bigger icon */
+}
+
+.module-name{
+    font-size:12px;   /* 👈 increased */
+    font-weight:700;
+    letter-spacing:1.5px;
+    color:#cfeedd;
+}
+
+.main-heading{
+    font-size:20px;   /* 👈 MAIN HEADER BIG */
+    font-weight:700;
+    color:#ffffff;
+    line-height:24px;
+}
+
+/* RIGHT */
+.status-badge{
+    font-size:12px;   /* 👈 bigger badge */
+    padding:7px 14px;
+    border-radius:20px;
+
+    background:rgba(29,101,50,0.30);
+    border:1px solid rgba(29,101,50,0.6);
+
+    color:#ffffff;
+    font-weight:600;
+}
+
+/* optional hover improvement */
+.stock-header-pro:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(0,0,0,0.30);
+}
+/*-------------------------Grid css code------------------------------*/
+#VOU th {
+        background: linear-gradient(135deg,#1d6733,#13894a,#186c38);
+        color:#fff !important;
+        font-weight:700 !important;
+        font-size:14px !important;
+        padding:16px 25px !important;
+        text-align:center !important;
+        letter-spacing:0.5px !important;
+        border-bottom:3px solid #1d411c !important;
+        border-radius:10px 10px 0 0 !important;
+        box-shadow:none !important;
+}
+#VOU th:hover {
+         background: linear-gradient(135deg,#1d6733,#13894a,#186c38);
+}
+#VOU td {
+            background-color: rgba(249, 249, 249,0.8); color:#333;
+            padding:16px 12px; text-align:center; font-size:14px;
+            border-bottom:2px solid #ddd; border-radius:8px;
+}
+#VOU tr:nth-child(even) td {background-color: rgba(241,241,241,0.8);}
+#VOU td:hover {background-color: rgba(249,249,249,0.8);}
+@media (max-width:768px){
+        #VOU th, #VOU td{padding:12px; font-size:14px;}
+        .card{flex:1 1 300px; max-width:360px;}
+        .card-body{padding:16px;}
+}
+
+
+
+.status-cards {
+  display: flex;
+  gap: 16px;
+  padding: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* =========================
+   CARD BASE STYLE
+========================= */
+.status-card {
+  flex: 1;
+  min-width: 160px;
+  max-width: 240px;
+
+  text-align: center;
+  padding: 18px 14px;
+
+  border-radius: 14px;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  cursor: default;
+}
+
+.status-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.16);
+}
+
+/* =========================
+   ICON STYLE
+========================= */
+.status-icon {
+  width: 50px;
+  height: 50px;
+
+  margin-bottom: 12px;
+
+  border-radius: 50%;
+
+  padding: 6px;
+
+  background: rgba(255,255,255,0.2);
+
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-card:hover .status-icon {
+  transform: scale(1.08);
+  box-shadow: 0 5px 16px rgba(0,0,0,0.14);
+}
+
+/* =========================
+   VALUE TEXT
+========================= */
+.count {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+
+/* =========================
+   LABEL TEXT
+========================= */
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f0f0f0;
+}
+
+/* =========================
+   TOTAL BENEFITS (CLEAN PREMIUM BLUE)
+========================= */
+.total-benefits {
+  background: linear-gradient(135deg, #b2a732, #b3a71e);
+}
+/* =================================================
+   DR AMOUNT (BLUE - PROFESSIONAL)
+================================================= */
+.dr-amount {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+}
+
+/* =================================================
+   CR AMOUNT (GREEN - SUCCESS)
+================================================= */
+.cr-amount {
+  background: linear-gradient(135deg, #5CB85C, #3D8B3D);
+}
+
+.card_BDNDr_amount {
+  background: linear-gradient(135deg, #b2a732, #b3a71e);
+}
+
+.card_BDNCr_amount {
+  background: linear-gradient(135deg, #b2a732, #b3a71e);
+}
+
+
+======================================JAVASCRIPT CODE FOR SET VALUES INTO PAGE ITEMS ===================================================================================
+
+(function () {
+
+  function formatNumber(value, decimals) {
+
+    var num = Number(
+      String(value).replace(/,/g, '')
+    );
+
+    if (isNaN(num)) {
+      num = 0;
+    }
+
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  }
+
+  /* =========================
+     Total Benefits
+  ========================= */
+
+//   var totalBenefits = formatNumber(
+//     apex.item('P1224_TOTAL_BENEFITS').getValue(),
+//     0
+//   );
+
+//   document.getElementById('card_total_benefits').textContent =
+//     totalBenefits;
+
+  /* =========================
+     DR Amount
+  ========================= */
+
+  var drAmount = formatNumber(
+    apex.item('P1224_DEBIT_AMOUNT').getValue(),
+    0
+  );
+
+  document.getElementById('card_dr_amount').textContent =
+    drAmount;
+
+  /* =========================
+     CR Amount
+  ========================= */
+
+  var crAmount = formatNumber(
+    apex.item('P1224_CREDIT_AMOUNT').getValue(),
+    0
+  );
+
+  document.getElementById('card_cr_amount').textContent =
+    crAmount;
+//       /* =========================
+//     BDN  CR Amount
+//   ========================= */
+
+    var drAmount = formatNumber(
+    apex.item('P1224_BDN_CR_AMOUNT').getValue(),
+    0
+  );
+
+  document.getElementById('card_BDNCr_amount').textContent =
+    drAmount;
+
+      /* =========================
+    BDN  DR Amount
+  ========================= */
+
+    var drAmount = formatNumber(
+    apex.item('P1224_BDN_DR_AMOUNT').getValue(),
+    0
+  );
+
+  document.getElementById('card_BDNDr_amount').textContent =
+    drAmount;
+
+
+
+})();
